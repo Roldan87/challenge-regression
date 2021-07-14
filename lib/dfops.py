@@ -41,6 +41,9 @@ class DfOps:
     def count_nans_in_column(self, column: str) -> int:
         return self.df[column].isna().sum()
 
+    def count_string_in_column(self, column: str, search: str) -> int:
+        return self.df[search].value_counts()
+
     # convert to datatype only
     def convert_cols_to_datatype(self, columns, set_datatype_to):
         for col in columns:
@@ -89,6 +92,19 @@ class DfOps:
         print(self.df.isnull().any())
         print("----------- missing values check END ------------>")
 
+    def one_hot_encode(self):
+        pass
+
+    def count_rows_having_strings_in_column(self, column, search_list: [str]) -> int:
+        filter = self.df[column].isin(search_list)
+        return self.df[filter].shape[0]
+
+    def count_rows_having_strings_in_column2(self, column, search_list: [str]) -> int:
+        return self.df.query(f'{column} == {search_list}').count()[1]
+
+    def drop_rows_having_strings_in_column(self, column, having_strings: [str]):
+        filter = self.df[column].isin(having_strings)
+        self.df = self.df[~filter]  # '~' means NOT (the opposite/negate)
 
 import matplotlib.pyplot as plt
 import seaborn as sns
