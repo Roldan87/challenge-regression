@@ -1,0 +1,5 @@
+.idea/
+.ipynb_checkpoints/
+leonor/.idea/
+leonor/.ipynb_checkpoints
+lib/__pycache__/
