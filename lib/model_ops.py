@@ -18,12 +18,27 @@ class Model:
         self.test_size = test_size
         self.model = None
         self.test_predictions = None
+        self.test_score = None
+        self.train_score = None
         self.apply_train_test_split()
         self.MAE = None
         self.MSE = None
         self.RMSE = None
         self.coefs = None
         self.test_residuals = None
+
+    # @property
+    def train_score(self):
+        return self.model.score(self.X_train, self.y_train)
+
+    @property
+    def get_test_score(self):
+        return self.model.score(self.X_test, self.y_test)
+
+    # @test_score.setter
+    # def set_test_score(self):
+    #     self._test_score = self.model.score(self.X_test, self.y_test)
+
 
     def print_line(self):
         print("-------------------------------------------------")
