@@ -7,7 +7,6 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_regression
 
 def add_cities_provinces_to_dataset(df):
@@ -80,7 +79,7 @@ for i in range(len(get_column_names)):
 
 #Filter outliers:
 df = df[df.area <= 500.0]
-df = df[df.price <= 1000000 ]
+df = df[df.price <= 1000000]
 df = df[df.bedrooms < 10.0]
 df.shape
 
@@ -124,10 +123,6 @@ X_model = df[['bedrooms']]
 y_model = df[['price']]
 
 X_train, X_test, y_train, y_test = train_test_split(X_model, y_model, test_size=0.20, random_state=0)
-#print(X_train.shape)
-#print(y_train.shape)
-#print(X_test.shape)
-#print(y_test.shape)
 
 nb_degree = 1
 polynomial_features = PolynomialFeatures(degree = nb_degree)
@@ -209,7 +204,7 @@ df_dummy.drop('property_subtype', axis=1, inplace=True)
 #print(df_dummy)
 
 
-#X_model = df_dummy.drop('price', axis=1, inplace=True)
+#Linear model
 X_model = df_dummy.iloc[:,:-1]
 y_model = df_dummy.iloc[:,[26]] # end column
 
@@ -218,23 +213,51 @@ X_train, X_test, y_train, y_test = train_test_split(X_model, y_model,
 regressor = LinearRegression()
 regressor.fit(X_train, y_train)
 y_pred = regressor.predict(X_test)
-print(regressor.score(X_train, y_train))
-print(regressor.score(X_model, y_model))
+print('Score X/y_train_80% =',regressor.score(X_train, y_train))
+print('Score X/y_model_100% =',regressor.score(X_model, y_model))
 
 from sklearn.metrics import r2_score
 score = r2_score(y_test,y_pred)
-print('r2_score =', score)
+print('r2_score (linear) =', score)
 
+#######################
+# With polynomial model
+#######################
+
+X_model = df_dummy.iloc[:,:-1]
+y_model = df_dummy.iloc[:,[26]]# end column
+
+X_train, X_test, y_train, y_test = train_test_split(X_model, y_model,
+                                                    test_size=0.20, random_state=0)
+
+nb_degree = 1
+polynomial_features = PolynomialFeatures(degree = nb_degree)
+X_TRANSF = polynomial_features.fit_transform(X_train)
+
+model=make_pipeline(PolynomialFeatures(degree=2),
+                   LinearRegression())
+model.fit(X_train,y_train)
+# model.scores(X_test,y_test)
+predictions=model.predict(X_test)
+score = r2_score(y_test,y_pred)
+print('r2_score (polynomial)=', score)
 
 '''
 ########################
 # Choose features to prepare OneHotEncoding
 # area, bedrooms
-# region, buildind_state, property_type, property_subtype
+# region, building_state, property_type, property_subtype
 ########################
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 
-le=LabelEncoder()
+X_model = df_dummy.iloc[:,:-1]
+y_model = df_dummy.iloc[:,[26]]# end column
+
+X_train, X_test, y_train, y_test = train_test_split(X_model, y_model,
+                                                    test_size=0.20, random_state=0)
+ohe = OneHotEncoder()
+
+
 dfle = df.copy()
 dfle.region=le.fit_transform(dfle.region)
 dfle.building_state = le.fit_transform(dfle.building_state)
