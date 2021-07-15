@@ -9,6 +9,10 @@ from sklearn.pipeline import make_pipeline
 
 class DfOps:
 
-    def __init__(self, dataframe, max_cols, cons_width=640):
-        self.df = dataframe
-        self.df.sort_index()
+    def __init__(self, X, y, degree: int, random_state: int, test_size=0.2):
+
+    # # Linear regression model
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=45, test_size=0.2)
+    # model = make_pipeline(PolynomialFeatures(degree=4), linear_model.LinearRegression())
+    # model.fit(X_train, y_train)
+    # prediction = model.predict(X_test)
