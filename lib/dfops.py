@@ -108,6 +108,7 @@ class DfOps:
 
     def strings_in_column_below_treshold_are(self, column: str, treshold: float):
         tmp_count = self.count_values_percentage(column)
+        # above returns a series
         count_df = pd.DataFrame(tmp_count)
         col_of_interest = column
         negligable_count = count_df[col_of_interest] < treshold
