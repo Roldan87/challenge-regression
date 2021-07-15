@@ -61,6 +61,7 @@ def run():
 if __name__ == '__main__':
     run()
 
+<<<<<<< HEAD
 # CODE LEONOR
 
 df = pd.read_csv("temp_output (1).csv")
@@ -82,3 +83,34 @@ df_copy['price'] = df_copy[df_copy['price'] < 2000000]
 #Dropping properties with more then 500m2
 df_copy['area'] = df_copy[df_copy['area'] < 500.000000]
 df_copy.area.value_counts()
+=======
+
+
+
+
+
+# Area & Bedrooms features vs Price model
+
+# Features
+x = df[['area', 'bedrooms']]
+y = df['price']
+
+# Linear regression model
+X_train, X_test, y_train, y_test = train_test_split(x, y, random_state=45, test_size=0.2)
+model = make_pipeline(PolynomialFeatures(degree=4), linear_model.LinearRegression())
+model.fit(X_train, y_train)
+prediction = model.predict(X_test)
+
+# Model score
+train_score = model.score(X_train, y_train)
+train_score = train_score * 100
+test_score = model.score(X_test, y_test)
+test_score = test_score * 100
+print(f'Train score (dof = 4) features area and bedrooms: {train_score} %')
+print(f'Test score (dof = 4) features area and bedrooms: {test_score} %\n')
+
+#Train score (dof = 4) features area and bedrooms: 47.80220051078344 %
+#Test score (dof = 4) features area and bedrooms: 52.6614624863633 %
+
+
+>>>>>>> 9e92d4598e17cd288ee9ec59e8c09a0f55d75ebf
