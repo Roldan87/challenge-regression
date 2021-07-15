@@ -49,7 +49,7 @@ def run():
     # creating a mdl instance creates the train and test variables at initialization
     linear_model = mdl(X, y, 45)  # default test_size=0.2
     linear_model.apply_linear_regression()
-
+    linear_model.test_residuals
     # poly_model = mdl(X, y, 45)
     # poly_model.apply_polynomial_regression(degree=4)
     # todo: numeric state of house
