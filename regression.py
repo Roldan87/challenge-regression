@@ -70,5 +70,64 @@ def run():
     corr = sns.heatmap(dfo.df.corr(), linewidths=0.4, cmap="YlGnBu")
     corr.set_title('Correlation between all the house features')
 
+
+    ######################################## Data preparation #########################################
+
+df = pd.read_csv('jose/df_cut_houses.csv', sep=',', index_col=0)
+
+X = df[['area', 'bedrooms']].values.reshape(-1,2)
+Y = df['price']
+
+######################## Prepare model data point for visualization ###############################
+
+x = X[:, 0]
+y = X[:, 1]
+z = Y
+
+x_pred = np.linspace(20, 500, 100)   # range of area values
+y_pred = np.linspace(0, 12, 12)  # range of bedrooms values
+xx_pred, yy_pred = np.meshgrid(x_pred, y_pred)
+model_viz = np.array([xx_pred.flatten(), yy_pred.flatten()]).T
+
+################################################ Train #############################################
+
+ols = linear_model.LinearRegression()
+model = ols.fit(X, Y)
+predicted = model.predict(model_viz)
+
+############################################## Evaluate ############################################
+
+r2 = model.score(X, Y)
+
+############################################## Plot ################################################
+
+plt.style.use('default')
+
+fig = plt.figure(figsize=(12, 4))
+
+ax1 = fig.add_subplot(131, projection='3d')
+ax2 = fig.add_subplot(132, projection='3d')
+ax3 = fig.add_subplot(133, projection='3d')
+
+axes = [ax1, ax2, ax3]
+
+for ax in axes:
+    ax.plot(x, y, z, color='k', zorder=15, linestyle='none', marker='o', alpha=0.3)
+    ax.scatter(xx_pred.flatten(), yy_pred.flatten(), predicted, facecolor=(0,0,0,0), s=20, edgecolor='#70b3f0')
+    ax.set_xlabel('Area', fontsize=12)
+    ax.set_ylabel('Bedrooms', fontsize=12)
+    ax.set_zlabel('Price', fontsize=12)
+    ax.locator_params(nbins=4, axis='x')
+    ax.locator_params(nbins=5, axis='x')
+
+
+ax1.view_init(elev=28, azim=120)
+ax2.view_init(elev=4, azim=114)
+ax3.view_init(elev=60, azim=165)
+
+fig.suptitle('$R^2 = %.2f$' % r2, fontsize=20)
+
+fig.tight_layout()
+
 if __name__ == '__main__':
     run()
