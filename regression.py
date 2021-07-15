@@ -76,3 +76,4 @@ df_copy.area.value_counts()
 #graphics
 corr = sns.heatmap(df.corr(), linewidths=0.4, cmap="YlGnBu")
 corr.set_title('Correlation between all the house features')
+
