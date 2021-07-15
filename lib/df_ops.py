@@ -15,6 +15,7 @@ class DfOps:
         pd.set_option('display.max_columns', max_cols)
         pd.set_option('display.max_rows', None)
         pd.set_option('display.width', cons_width)  # make output in console wider
+        pd.options.mode.chained_assignment = None  # default='warn'
 
     @staticmethod
     def initiate_numpy(console_width=640):
@@ -117,6 +118,22 @@ class DfOps:
         below_treshold_list = list(below_treshold.index)
         return below_treshold_list
 
+    def drop_rows_smaller_than_treshold(self, column: str, treshold: float):
+        filter = self.df[column] < treshold
+        self.df = self.df[filter]
+
+    def drop_rows_larger_than_treshold(self, column: str, treshold):
+        filter = self.df[column] > treshold
+        self.df = self.df[filter]
+
+    def drop_rows_equal_to_treshold(self, column: str, treshold):
+        filter = self.df[column] == treshold
+        self.df = self.df[filter]
+
+    def reindex(self):
+        self.df.reset_index(drop=True, inplace=True)
+
+    # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.get_dummies.html
     # By default get_dummies() does not do dummy encoding, but one-hot encoding
     def one_hot_encode(self, column: str, prefix: str):
         pd.get_dummies(self.df[column], prefix=prefix)

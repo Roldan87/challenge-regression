@@ -3,3 +3,4 @@
 leonor/.idea/
 leonor/.ipynb_checkpoints
 lib/__pycache__/
+*.pyc
