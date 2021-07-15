@@ -72,3 +72,7 @@ df_copy['price'] = df_copy[df_copy['price'] < 2000000]
 #Dropping properties with more then 500m2
 df_copy['area'] = df_copy[df_copy['area'] < 500.000000]
 df_copy.area.value_counts()
+
+#graphics
+corr = sns.heatmap(df.corr(), linewidths=0.4, cmap="YlGnBu")
+corr.set_title('Correlation between all the house features')
