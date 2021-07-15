@@ -18,6 +18,12 @@ def run():
     df_houses = pd.read_csv('assets/temp_output.csv', sep=',', index_col=0)
     dfo = dop.DfOps(df_houses, 50)
 
+    # dropping rows for subtype
+    # get list of strings that have values below treshold
+    column = "property_subtype"
+    unwanted_property = dfo.strings_in_column_below_treshold_are(column, 0.3)
+    dfo.drop_rows_having_strings_in_column(column, unwanted_property)
+
     # Area & Bedrooms features vs Price model
     # Features
     features = ["area", "bedrooms"]
@@ -41,12 +47,6 @@ def run():
 
     # Train score (dof = 4) features area and bedrooms: 47.80220051078344 %
     # Test score (dof = 4) features area and bedrooms: 52.6614624863633 %
-
-    # dropping rows for subtype
-    # get list of strings that have values below treshold
-    column = "property_subtype"
-    unwanted_property = dfo.strings_in_column_below_treshold_are(column, 0.3)
-    dfo.drop_rows_having_strings_in_column(column, unwanted_property)
 
 if __name__ == '__main__':
     run()
