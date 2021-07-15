@@ -242,55 +242,42 @@ predictions=model.predict(X_test)
 score = r2_score(y_test,y_pred)
 print('r2_score (polynomial)=', score)
 
-'''
+
 ########################
 # Choose features to prepare OneHotEncoding
 # area, bedrooms
 # region, building_state, property_type, property_subtype
 ########################
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import make_column_transformer
 
-X_model = df_dummy.iloc[:,:-1]
-y_model = df_dummy.iloc[:,[26]]# end column
+#Reorder columns:
+df_ohe = df[['region','building_state','property_type','property_subtype','area','bedrooms','price']]
+print (df_ohe.head())
+
+X_model = df_ohe.iloc[:,:-1]
+y_model = df_ohe.iloc[:,[6]]# end column
+
+#print(X_model.shape)
+#print(y_model.shape)
 
 X_train, X_test, y_train, y_test = train_test_split(X_model, y_model,
                                                     test_size=0.20, random_state=0)
-ohe = OneHotEncoder()
+column_trans = make_column_transformer(
+    (OneHotEncoder(sparse=False),['region','building_state','property_type','property_subtype']),
+    remainder='passthrough')
 
-
-dfle = df.copy()
-dfle.region=le.fit_transform(dfle.region)
-dfle.building_state = le.fit_transform(dfle.building_state)
-dfle.property_type=le.fit_transform(dfle.property_type)
-dfle.property_subtype=le.fit_transform(dfle.property_subtype)
-#print(dfle.head())
-y_model = dfle[['price']].values
-X_model = dfle[['region','building_state','property_type','property_subtype','area','bedrooms']].values
-
-#print(X_model)
-
-from sklearn.preprocessing import OneHotEncoder
-
-ohe = OneHotEncoder(categories='auto')
-#ohe = OneHotEncoder(categorical_features=[0])
-X_model = ohe.fit_transform(X_model).toarray()
-
-df_model = pd.DataFrame(X_model)
-print('df_model =')
-print(df_model.head())
-
-X_train, X_test, y_train, y_test = train_test_split(X_model, y_model, test_size=0.20, random_state=0)
-
+X_train_trans = column_trans.fit_transform(X_train)
+X_test_trans = column_trans.fit_transform(X_test)
 
 nb_degree = 1
 polynomial_features = PolynomialFeatures(degree = nb_degree)
-X_TRANSF = polynomial_features.fit_transform(X_train)
+X_TRANSF = polynomial_features.fit_transform(X_train_trans)
 
 model=make_pipeline(PolynomialFeatures(degree=1),
                    LinearRegression())
-model.fit(X_train,y_train)
-# model.scores(X_test,y_test)
-predictions=model.predict(X_test)
-score=model.score(X_test,y_test)
+model.fit(X_train_trans,y_train)
+
+predictions=model.predict(X_test_trans)
+score=model.score(predictions,y_test)
 print('Score (OneHotEncoding) =', score)
-'''

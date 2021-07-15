@@ -1,4 +1,3 @@
-
 from lib import dfops as dop
 import numpy as np
 import sklearn.datasets as datasets
@@ -16,47 +15,38 @@ from sklearn.pipeline import make_pipeline
 
 
 def run():
-    # df_houses = pd.read_csv("final_list_houses_dataset.csv", sep=',').iloc[:, 1:]
     df_houses = pd.read_csv('assets/temp_output.csv', sep=',', index_col=0)
     dfo = dop.DfOps(df_houses, 50)
-    # df.print_datatypes()
 
-    """
-    ['good'
-     'just renovated'
-     'as new'
-     'to renovate'
-     'undefined'
-     'to be done up'
-     'to restore']
-    """
-    # building_state
-    # property_subtype
-    ['house'
-     'villa'
-     'mixed'
-     'town'
-     'farmhouse'
-     'chalet'
-     'country'
-     'exceptional'
-     'building'
-     'apartment'
-     'mansion'
-     'bungalow'
-     'other'
-     'manor'
-     'castle'
-     'land']
-
-    unwanted_property = ['other', 'manor', 'castle', 'land', 'chalet']
+    # dropping rows for subtype
+    # get list of strings that have values below treshold
     column = "property_subtype"
-
-    print(dfo.count_rows_having_strings_in_column(column, unwanted_property))  # 70
-    print(dfo.count_rows_having_strings_in_column2(column, unwanted_property))
-    print(dfo.df.shape[0])  # row count 10058
+    unwanted_property = dfo.strings_in_column_below_treshold_are(column, 0.3)
     dfo.drop_rows_having_strings_in_column(column, unwanted_property)
-    print(dfo.df.shape[0])  # row count 9988, rows have been dropped
+
+    # Area & Bedrooms features vs Price model
+    # Features
+    features = ["area", "bedrooms"]
+    target = "price"
+    X = dfo.df[features]
+    y = dfo.df[target]
+
+    # Linear regression model
+    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=45, test_size=0.2)
+    model = make_pipeline(PolynomialFeatures(degree=4), linear_model.LinearRegression())
+    model.fit(X_train, y_train)
+    prediction = model.predict(X_test)
+
+    # Model score
+    train_score = model.score(X_train, y_train)
+    train_score = train_score * 100
+    test_score = model.score(X_test, y_test)
+    test_score = test_score * 100
+    print(f'Train score (dof = 4) features area and bedrooms: {train_score} %')
+    print(f'Test score (dof = 4) features area and bedrooms: {test_score} %\n')
+
+    # Train score (dof = 4) features area and bedrooms: 47.80220051078344 %
+    # Test score (dof = 4) features area and bedrooms: 52.6614624863633 %
 
 if __name__ == '__main__':
     run()
@@ -89,6 +79,7 @@ df_copy.area.value_counts()
 
 
 
+<<<<<<< HEAD
 # Area & Bedrooms features vs Price model
 
 # Features
@@ -114,3 +105,5 @@ print(f'Test score (dof = 4) features area and bedrooms: {test_score} %\n')
 
 
 >>>>>>> 9e92d4598e17cd288ee9ec59e8c09a0f55d75ebf
+=======
+>>>>>>> bc280c510dd7ae4091c431073d81cce6531c27d5
