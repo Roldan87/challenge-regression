@@ -38,6 +38,7 @@ def run():
     # reindex after dropping rows
     dfo.reindex()
     print(dfo.df.shape)
+    dfo.write_to_csv("assets/cleaned_data.csv")
     # Area & Bedrooms features vs Price model
     # Features
     features = ["area", "bedrooms"]
@@ -70,7 +71,7 @@ def run():
     corr = sns.heatmap(dfo.df.corr(), linewidths=0.4, cmap="YlGnBu")
     corr.set_title('Correlation between all the house features')
 
-
+"""
     ######################################## Data preparation #########################################
 
 df = pd.read_csv('jose/df_cut_houses.csv', sep=',', index_col=0)
@@ -128,6 +129,7 @@ ax3.view_init(elev=60, azim=165)
 fig.suptitle('$R^2 = %.2f$' % r2, fontsize=20)
 
 fig.tight_layout()
+"""
 
 if __name__ == '__main__':
     run()
