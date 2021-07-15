@@ -100,7 +100,7 @@ class DfOps:
     def count_rows_having_strings_in_column2(self, column, search_list: [str]) -> int:
         return self.df.query(f'{column} == {search_list}').count()[1]
 
-    def drop_rows_having_strings_in_column(self, column, having_strings: [str]):
+    def drop_rows_when_column_value_in_list(self, column, having_strings: [str]):
         filter = self.df[column].isin(having_strings)
         self.df = self.df[~filter]  # '~' means NOT (the opposite/negate)
 

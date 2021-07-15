@@ -22,8 +22,8 @@ def run():
     # dropping rows for subtype
     # get list of strings that have values below treshold
     column = "property_subtype"
-    unwanted_property = dfo.strings_in_column_below_treshold_are(column, 0.3)
-    dfo.drop_rows_having_strings_in_column(column, unwanted_property)
+    unwanted_property_types = dfo.strings_in_column_below_treshold_are(column, 0.3)
+    dfo.drop_rows_when_column_value_in_list(column, unwanted_property_types)
 
     print(dfo.df.shape)
     # Dropping properties that have more then 12 bedrooms
@@ -39,6 +39,7 @@ def run():
     dfo.reindex()
     print(dfo.df.shape)
     dfo.write_to_csv("assets/cleaned_data.csv")
+
     # Area & Bedrooms features vs Price model
     # Features
     features = ["area", "bedrooms"]
@@ -49,6 +50,7 @@ def run():
     # Linear regression model
     # creating a mdl instance creates the train and test variables at initialization
     linear_model = mdl(X, y, 45)  # default test_size=0.2
+    linear_model.do_train_test_split()
     linear_model.apply_linear_regression()
     linear_model.test_residuals
     # poly_model = mdl(X, y, 45)
