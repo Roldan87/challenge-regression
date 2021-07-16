@@ -101,12 +101,22 @@ def run():
     plt.xlabel("degree of polynomial")
     plt.tight_layout()
     plt.legend()
+    # plt.show()
+    # plot train and test score
+    plt.clf()
+    plt.ylabel("Score")
+    plt.xlabel("Degree of Polynomial")
+    plt.plot(list(test_scores.values()), label="Test Score")
+    plt.plot(list(train_scores.values()), label="Train Score")
+    plt.legend()
+    plt.tight_layout()
     plt.show()
 
 
     ######################## Prepare model data point for visualization ###############################
+    print(X.head())
+    print("ok")
     """
-    x = X[:, 0]  # todo: what's going on here? try it on X and print
     y = X[:, 1]
     z = Y
 
