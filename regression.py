@@ -101,7 +101,8 @@ def run():
     plt.xlabel("degree of polynomial")
     plt.tight_layout()
     plt.legend()
-    # plt.show()
+    plt.show()
+    
     # plot train and test score
     plt.clf()
     plt.ylabel("Score")
@@ -116,9 +117,9 @@ def run():
     ######################## Prepare model data point for visualization ###############################
     print(X.head())
     print("ok")
-    """
-    y = X[:, 1]
-    z = Y
+    x = X["area"]
+    Y = X["bedrooms"]  # capital Y as to not interfere with y
+    z = y  # target, namely price
 
     x_pred = np.linspace(20, 500, 100)   # range of area values
     y_pred = np.linspace(0, 12, 12)  # range of bedrooms values
@@ -126,8 +127,7 @@ def run():
     model_viz = np.array([xx_pred.flatten(), yy_pred.flatten()]).T
 
     ################################################ Train #############################################
-
-    ols = lin_mdl1.LinearRegression()
+    ols = LinearRegression()
     model = ols.fit(X, Y)
     predicted = model.predict(model_viz)
 
@@ -136,7 +136,7 @@ def run():
     r2 = model.score(X, Y)
 
     ############################################## Plot ################################################
-
+    plt.clf()
     plt.style.use('default')
 
     fig = plt.figure(figsize=(12, 4))
@@ -162,9 +162,8 @@ def run():
     ax3.view_init(elev=60, azim=165)
 
     fig.suptitle('$R^2 = %.2f$' % r2, fontsize=20)
-
     fig.tight_layout()
-    """
+    plt.show()
 
 if __name__ == '__main__':
     run()
