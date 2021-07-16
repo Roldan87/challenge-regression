@@ -221,7 +221,7 @@ score = r2_score(y_test,y_pred)
 print('r2_score (linear) =', score)
 
 ##################################################
-# With polynomial model with Categorique features
+# With polynomial model with Categorical features
 ##################################################
 
 X_model = df_dummy.iloc[:,:25]
@@ -257,12 +257,12 @@ y_model = df_cat.iloc[:,[3]]# end column
 
 X_train, X_test, y_train, y_test = train_test_split(X_model, y_model,
                                                     test_size=0.20, random_state=0)
-print('-----Integrate building_state------')
-print(X_train.shape)
-print(y_train.shape)
-print(X_test.shape)
-print(y_test.shape)
-print('-----------')
+#print('-----Integrate building_state------')
+#print(X_train.shape)
+#print(y_train.shape)
+#print(X_test.shape)
+#print(y_test.shape)
+#print('-----------')
 
 nb_degree = 1
 polynomial_features = PolynomialFeatures(degree = nb_degree)
@@ -276,10 +276,25 @@ predictions=model.predict(X_test)
 score = r2_score(y_test,y_pred)
 print('r2_score (polynomial _ Buiding_state)=', score)
 
-x_p =X_train[:,0]
-y_p =y_train[:,0]
-#sns.pairplot(data=df_cat)
+x_p =X_train.iloc[:,[0]]
+y_p =y_train
+x_t =X_test.iloc[:,[0]]
 
+print('prediction=', predictions.shape)
+print('X_test shape=', X_test.shape)
+plt.scatter(x_p, y_p, c='c', label='data')
+plt.scatter(x_t, predictions, c='r', label='Prediction')
+plt.title("Price/building_state ")
+plt.xlabel("building_state")
+plt.ylabel("price")
+plt.grid(True)
+plt.legend()
+plt.show()
+
+sns.pairplot(data=df_cat)
+plt.show()
+
+'''
 fig, ax = plt.subplots()
 sns.set_style("whitegrid")
 sns.lmplot(x=x_p, y=y_p, data=df_cat)
@@ -289,6 +304,7 @@ plt.title("Price/building_state")
 plt.legend()
 #plt.grid(True)
 plt.show()
+'''
 
 '''
 #######
