@@ -100,23 +100,23 @@ class DfOps:
     def count_rows_having_strings_in_column2(self, column, search_list: [str]) -> int:
         return self.df.query(f'{column} == {search_list}').count()[1]
 
-    def drop_rows_having_strings_in_column(self, column, having_strings: [str]):
+    def drop_rows_when_column_value_in_list(self, column, having_strings: [str]):
         filter = self.df[column].isin(having_strings)
         self.df = self.df[~filter]  # '~' means NOT (the opposite/negate)
 
     def count_values_percentage(self, column):
         return self.df[column].value_counts(normalize=True) * 100
 
-    def strings_in_column_below_treshold_are(self, column: str, treshold: float):
+    def strings_in_column_below_threshold_are(self, column: str, treshold: float):
         tmp_count = self.count_values_percentage(column)
         # above returns a series
         count_df = pd.DataFrame(tmp_count)
         col_of_interest = column
-        negligable_count = count_df[col_of_interest] < treshold
-        below_treshold = count_df[negligable_count]
+        negligible_count = count_df[col_of_interest] < treshold
+        below_threshold = count_df[negligible_count]
         # return list of values that had a count below our treshold
-        below_treshold_list = list(below_treshold.index)
-        return below_treshold_list
+        below_threshold_list = list(below_threshold.index)
+        return below_threshold_list
 
     def drop_rows_smaller_than_treshold(self, column: str, treshold: float):
         filter = self.df[column] < treshold
