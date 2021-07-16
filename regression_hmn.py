@@ -257,6 +257,12 @@ y_model = df_cat.iloc[:,[3]]# end column
 
 X_train, X_test, y_train, y_test = train_test_split(X_model, y_model,
                                                     test_size=0.20, random_state=0)
+print('-----Integrate building_state------')
+print(X_train.shape)
+print(y_train.shape)
+print(X_test.shape)
+print(y_test.shape)
+print('-----------')
 
 nb_degree = 1
 polynomial_features = PolynomialFeatures(degree = nb_degree)
@@ -270,6 +276,35 @@ predictions=model.predict(X_test)
 score = r2_score(y_test,y_pred)
 print('r2_score (polynomial _ Buiding_state)=', score)
 
+x_p =X_train[:,0]
+y_p =y_train[:,0]
+#sns.pairplot(data=df_cat)
+
+fig, ax = plt.subplots()
+sns.set_style("whitegrid")
+sns.lmplot(x=x_p, y=y_p, data=df_cat)
+ax.set_xlabel('building_state')
+ax.set_ylabel('price')
+plt.title("Price/building_state")
+plt.legend()
+#plt.grid(True)
+plt.show()
+
+'''
+#######
+fig = plt.figure()
+plt.figure(figsize=(10,10))
+ax = fig.add_subplot(111, projection='3d')
+x =X[:,0]
+y =X[:,1]
+z =y
+ax.scatter(x, y, z, c='b', marker='o')
+ax.set_xlabel('X1 Label')
+ax.set_ylabel('X2 Label')
+ax.zaxis.set_rotate_label(False)  # disable automatic rotation
+ax.set_zlabel('Y label', rotation=90)
+plt.show()
+'''
 
 '''
 X = pd.DataFrame({'animals':['low','med','low','high','low','high']})
